@@ -1,0 +1,19 @@
+language: node_js
+node_js:
+  - "8"
+  - "6"
+
+before_install:
+  - npm install -g npx@latest
+  - npm --version
+  - yarn --version
+  - npx --version
+
+install:
+  - npx yarn install
+  - npx lerna bootstrap
+
+script:
+  - 'if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then npx yarn run lint:commit; fi'
+  - npx yarn run lint:code
+  - npx yarn run test:coverage

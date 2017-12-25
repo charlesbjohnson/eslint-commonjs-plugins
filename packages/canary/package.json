@@ -1,0 +1,25 @@
+{
+  "name": "canary",
+  "license": "MIT",
+  "version": "0.0.0",
+  "main": "index.js",
+  "scripts": {
+    "lint": "xo",
+    "test": "jest 2>&1",
+    "test:coverage": "jest 2>&1 && codecov",
+    "test:debug": "node --inspect-brk $(which jest) --runInBand"
+  },
+  "devDependencies": {
+    "codecov": "^3.0.0",
+    "jest": "^22.0.4",
+    "xo": "^0.18.2"
+  },
+  "engines": {
+    "node": ">=6"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "coverageDirectory": "./coverage/"
+  },
+  "xo": false
+}
