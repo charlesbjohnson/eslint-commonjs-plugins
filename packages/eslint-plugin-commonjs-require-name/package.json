@@ -1,0 +1,55 @@
+{
+  "name": "eslint-plugin-commonjs-require-name",
+  "description": "eslint plugin for enforcing a `require` naming convention",
+  "author": "Charles B Johnson <mail@cbjohnson.info> (cbjohnson.info)",
+  "license": "MIT",
+  "repository": "charlesbjohnson/eslint-module-plugins",
+  "version": "0.0.0",
+  "main": "plugin.js",
+  "scripts": {
+    "lint": "xo",
+    "test": "jest 2>&1",
+    "test:coverage": "yarn run test && codecov",
+    "test:debug": "node inspect $(which jest) --runInBand",
+    "test:inspect": "node --inspect-brk $(which jest) --runInBand"
+  },
+  "dependencies": {
+    "is-path-inside": "^1.0.1",
+    "is-valid-path": "^0.1.1",
+    "lodash.differencewith": "^4.5.0",
+    "lodash.escaperegexp": "^4.1.2",
+    "lodash.get": "^4.4.2",
+    "lodash.intersectionwith": "^4.4.0",
+    "lodash.mergewith": "^4.6.0",
+    "no-case": "^2.3.2",
+    "pkg-dir": "^2.0.0",
+    "pluralize": "^7.0.0",
+    "validate-npm-package-name": "^3.0.0"
+  },
+  "peerDependencies": {
+    "eslint": ">=0.8.0"
+  },
+  "devDependencies": {
+    "codecov": "^3.0.0",
+    "jest": "^22.1.4",
+    "xo": "^0.18.2"
+  },
+  "keywords": [
+    "commonjs",
+    "convention",
+    "eslint",
+    "eslint-plugin",
+    "eslintplugin",
+    "name",
+    "naming",
+    "require"
+  ],
+  "engines": {
+    "node": ">=6"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "coverageDirectory": "./coverage"
+  },
+  "xo": false
+}
