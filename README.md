@@ -41,6 +41,7 @@ If you need more flexibility with the plugin configuration then you can override
 
 ```json
 {
+  "plugins": ["commonjs-require-name"],
   "rules": {
     "commonjs-require-name/rule": "warn"
   }

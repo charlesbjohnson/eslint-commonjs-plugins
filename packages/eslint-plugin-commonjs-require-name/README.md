@@ -15,25 +15,27 @@
     $ npm install --save-dev eslint-plugin-commonjs-require-name
     ```
 
-3. Configure the plugin the recommended way, with default settings:
+3. Configure the plugin...
+    - The recommended way, with default settings:
 
-    ```json
-    {
-      "extends": [
-        "plugin:commonjs-require-name/recommended"
-      ]
-    }
-    ```
+        ```json
+        {
+          "extends": [
+            "plugin:commonjs-require-name/recommended"
+          ]
+        }
+        ```
 
-4. Override the configuration options as needed:
+    - Or override the configuration options as needed:
 
-    ```json
-    {
-      "rules": {
-        "commonjs-require-name/rule": ["warn", {"strict": {"size": true}}, {"order": "any"}]
-      }
-    }
-    ```
+        ```json
+        {
+          "plugins": ["commonjs-require-name"],
+          "rules": {
+            "commonjs-require-name/rule": ["warn", {"strict": {"size": true}}, {"order": "any"}]
+          }
+        }
+        ```
 
 ## Summary
 
