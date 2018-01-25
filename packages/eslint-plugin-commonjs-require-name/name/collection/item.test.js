@@ -11,6 +11,26 @@ describe('Item', () => {
 		});
 	});
 
+	describe('#compare', () => {
+		test('less', () => {
+			expect(
+				Item.instance('bar', false).compare(Item.instance('foo', true))
+			).toBe(-1);
+		});
+
+		test('greater', () => {
+			expect(
+				Item.instance('foo', false).compare(Item.instance('bar', true))
+			).toBe(1);
+		});
+
+		test('equal', () => {
+			expect(
+				Item.instance('foo', false).compare(Item.instance('foo', true))
+			).toBe(0);
+		});
+	});
+
 	describe('#equals', () => {
 		test('same value', () => {
 			expect(

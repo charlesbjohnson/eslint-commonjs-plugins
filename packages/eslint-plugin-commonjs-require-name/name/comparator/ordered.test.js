@@ -31,7 +31,7 @@ describe('Ordered.Any', () => {
 
 describe('Ordered.LeftToRight', () => {
 	describe('.instance', () => {
-		test('in order', () => {
+		test('in order strict', () => {
 			expect(
 				Ordered.LeftToRight.instance(
 					Collection.Items.instance('space/thing/name')
@@ -39,7 +39,7 @@ describe('Ordered.LeftToRight', () => {
 			).toBe(true);
 		});
 
-		test('out of order', () => {
+		test('out of order strict', () => {
 			expect(
 				Ordered.LeftToRight.instance(
 					Collection.Items.instance('space/thing/name')
@@ -47,15 +47,7 @@ describe('Ordered.LeftToRight', () => {
 			).toBe(false);
 		});
 
-		test('in order missing right', () => {
-			expect(
-				Ordered.LeftToRight.instance(
-					Collection.Items.instance('space/thing/name')
-				).equals(Collection.Items.instance('spaceThing'))
-			).toBe(true);
-		});
-
-		test('in order missing left', () => {
+		test('in order loose missing left', () => {
 			expect(
 				Ordered.LeftToRight.instance(
 					Collection.Items.instance('space/thing/name')
@@ -63,7 +55,47 @@ describe('Ordered.LeftToRight', () => {
 			).toBe(true);
 		});
 
-		test('in order extra left', () => {
+		test('in order loose missing right', () => {
+			expect(
+				Ordered.LeftToRight.instance(
+					Collection.Items.instance('space/thing/name')
+				).equals(Collection.Items.instance('spaceThing'))
+			).toBe(true);
+		});
+
+		test('in order loose missing both', () => {
+			expect(
+				Ordered.LeftToRight.instance(
+					Collection.Items.instance('module/space/thing/name')
+				).equals(Collection.Items.instance('spaceThing'))
+			).toBe(true);
+		});
+
+		test('in order loose different left', () => {
+			expect(
+				Ordered.LeftToRight.instance(
+					Collection.Items.instance('space/thing/name')
+				).equals(Collection.Items.instance('differentThingName'))
+			).toBe(true);
+		});
+
+		test('in order loose different right', () => {
+			expect(
+				Ordered.LeftToRight.instance(
+					Collection.Items.instance('space/thing/name')
+				).equals(Collection.Items.instance('spaceThingDifferent'))
+			).toBe(true);
+		});
+
+		test('in order loose different both', () => {
+			expect(
+				Ordered.LeftToRight.instance(
+					Collection.Items.instance('module/space/thing/name')
+				).equals(Collection.Items.instance('fooSpaceThingBar'))
+			).toBe(true);
+		});
+
+		test('in order loose extra left', () => {
 			expect(
 				Ordered.LeftToRight.instance(
 					Collection.Items.instance('space/thing/name')
@@ -71,19 +103,35 @@ describe('Ordered.LeftToRight', () => {
 			).toBe(true);
 		});
 
-		test('in order extra right', () => {
+		test('in order loose extra right', () => {
 			expect(
 				Ordered.LeftToRight.instance(
 					Collection.Items.instance('space/thing/name')
 				).equals(Collection.Items.instance('spaceThingNameModule'))
 			).toBe(true);
 		});
+
+		test('in order loose extra both', () => {
+			expect(
+				Ordered.LeftToRight.instance(
+					Collection.Items.instance('space/thing/name')
+				).equals(Collection.Items.instance('fooSpaceThingNameBar'))
+			).toBe(true);
+		});
+
+		test('out of order loose', () => {
+			expect(
+				Ordered.LeftToRight.instance(
+					Collection.Items.instance('space/thing/name')
+				).equals(Collection.Items.instance('fooNameThingBar'))
+			).toBe(false);
+		});
 	});
 });
 
 describe('Ordered.RightToLeft', () => {
 	describe('.instance', () => {
-		test('in order', () => {
+		test('in order strict', () => {
 			expect(
 				Ordered.RightToLeft.instance(
 					Collection.Items.instance('space/thing/name')
@@ -91,7 +139,7 @@ describe('Ordered.RightToLeft', () => {
 			).toBe(true);
 		});
 
-		test('out of order', () => {
+		test('out of order strict', () => {
 			expect(
 				Ordered.RightToLeft.instance(
 					Collection.Items.instance('space/thing/name')
@@ -99,15 +147,7 @@ describe('Ordered.RightToLeft', () => {
 			).toBe(false);
 		});
 
-		test('in order missing right', () => {
-			expect(
-				Ordered.RightToLeft.instance(
-					Collection.Items.instance('space/thing/name')
-				).equals(Collection.Items.instance('thingSpace'))
-			).toBe(true);
-		});
-
-		test('in order missing left', () => {
+		test('in order loose missing left', () => {
 			expect(
 				Ordered.RightToLeft.instance(
 					Collection.Items.instance('space/thing/name')
@@ -115,7 +155,47 @@ describe('Ordered.RightToLeft', () => {
 			).toBe(true);
 		});
 
-		test('in order extra left', () => {
+		test('in order loose missing right', () => {
+			expect(
+				Ordered.RightToLeft.instance(
+					Collection.Items.instance('space/thing/name')
+				).equals(Collection.Items.instance('thingSpace'))
+			).toBe(true);
+		});
+
+		test('in order loose missing both', () => {
+			expect(
+				Ordered.RightToLeft.instance(
+					Collection.Items.instance('module/space/thing/name')
+				).equals(Collection.Items.instance('thingSpace'))
+			).toBe(true);
+		});
+
+		test('in order loose different left', () => {
+			expect(
+				Ordered.RightToLeft.instance(
+					Collection.Items.instance('space/thing/name')
+				).equals(Collection.Items.instance('nameThingDifferent'))
+			).toBe(true);
+		});
+
+		test('in order loose different right', () => {
+			expect(
+				Ordered.RightToLeft.instance(
+					Collection.Items.instance('space/thing/name')
+				).equals(Collection.Items.instance('differentThingSpace'))
+			).toBe(true);
+		});
+
+		test('in order loose different both', () => {
+			expect(
+				Ordered.RightToLeft.instance(
+					Collection.Items.instance('module/space/thing/name')
+				).equals(Collection.Items.instance('fooThingSpaceBar'))
+			).toBe(true);
+		});
+
+		test('in order loose extra left', () => {
 			expect(
 				Ordered.RightToLeft.instance(
 					Collection.Items.instance('space/thing/name')
@@ -123,12 +203,28 @@ describe('Ordered.RightToLeft', () => {
 			).toBe(true);
 		});
 
-		test('in order extra right', () => {
+		test('in order loose extra right', () => {
 			expect(
 				Ordered.RightToLeft.instance(
 					Collection.Items.instance('space/thing/name')
 				).equals(Collection.Items.instance('moduleNameThingSpace'))
 			).toBe(true);
+		});
+
+		test('in order loose extra both', () => {
+			expect(
+				Ordered.RightToLeft.instance(
+					Collection.Items.instance('space/thing/name')
+				).equals(Collection.Items.instance('fooNameThingSpaceBar'))
+			).toBe(true);
+		});
+
+		test('out of order loose', () => {
+			expect(
+				Ordered.RightToLeft.instance(
+					Collection.Items.instance('space/thing/name')
+				).equals(Collection.Items.instance('fooThingNameBar'))
+			).toBe(false);
 		});
 	});
 });

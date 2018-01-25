@@ -1,4 +1,5 @@
 const IntersectionWith = require('lodash.intersectionwith');
+const Collection = require('../collection');
 
 const Ordered = exports;
 
@@ -21,50 +22,69 @@ const RightToLeft = {
 	}
 };
 
+function instance(collection, type) {
+	collection.equals = equals(collection.equals, type);
+	return collection;
+}
+
 function equals(fn, type) {
 	return function(other) {
 		const kind = type === Any ? unordered : ordered;
 		return kind.call(this, other) && fn.call(this, other);
 	};
 }
-function instance(collection, type) {
-	collection.equals = equals(collection.equals, type);
-	return collection;
-}
 
 function ordered(other) {
-	if (this.value.length === other.value.length) {
-		return orderedFromLeft.call(this, other);
+	if (strict.call(this, other)) {
+		return true;
 	}
 
-	return (
-		orderedFromLeft.call(this, other) || orderedFromRight.call(this, other)
-	);
+	return loose.call(this, other);
 }
 
-function orderedFromLeft(other) {
-	const length = Math.min(this.value.length, other.value.length);
-
-	for (let i = 0; i < length; i++) {
-		if (!this.value[i].equals(other.value[i])) {
-			return false;
-		}
+function strict(other) {
+	if (this.value.length !== other.value.length) {
+		return false;
 	}
 
-	return true;
+	const sort = v => v.slice().sort((a, b) => a.compare(b));
+	const same = (lefts, rights) => {
+		for (let i = 0; i < lefts.length; i++) {
+			if (!lefts[i].equals(rights[i])) {
+				return false;
+			}
+		}
+
+		return true;
+	};
+
+	if (same(sort(this.value), sort(other.value))) {
+		return same(this.value, other.value);
+	}
 }
 
-function orderedFromRight(other) {
-	let i = this.value.length - 1;
-	let j = other.value.length - 1;
+function loose(other) {
+	const lefts = this.value;
+	const rights = other.value.slice();
 
-	while (i >= 0 && j >= 0) {
-		if (!this.value[i].equals(other.value[j])) {
+	let prev = -1;
+	for (const left of lefts) {
+		const index = rights.findIndex(right => left.equals(right));
+		if (index < 0) {
+			continue;
+		}
+
+		if (prev < 0) {
+			prev = index;
+			continue;
+		}
+
+		if (index < prev || index - prev > 1) {
 			return false;
 		}
 
-		i--;
-		j--;
+		rights[index] = Collection.Item.instance('', false);
+		prev = index;
 	}
 
 	return true;

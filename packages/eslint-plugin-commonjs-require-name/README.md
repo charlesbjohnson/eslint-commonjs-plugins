@@ -314,7 +314,7 @@ const intersectionByFP = require("lodash/fp/intersectionBy"); // reported
 // "commonjs-require-name/rule": ["error", {"order": "right-to-left"}, null]
 
 const userControllers = require("./app/controllers/user"); // ok
-const userModels = require("./app/models/user");           // ok
+const userModelsV2 = require("./app/models/user");         // ok
 const viewsUser = require("./app/views/user");             // reported
 
 

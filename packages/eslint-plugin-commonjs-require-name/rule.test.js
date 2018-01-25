@@ -230,7 +230,7 @@ describe('Rule', () => {
 			valid(
 				[
 					'var userControllers = require("./app/controllers/user");',
-					'var userModels = require("./app/models/user");'
+					'var userModelsV2 = require("./app/models/user");'
 				],
 				[options({order: 'right-to-left'}), null]
 			),

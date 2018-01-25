@@ -8,8 +8,20 @@ class Item {
 		this.namespace = namespace;
 	}
 
+	compare(other) {
+		if (this.value < other.value) {
+			return -1;
+		}
+
+		if (this.value > other.value) {
+			return 1;
+		}
+
+		return 0;
+	}
+
 	equals(other) {
-		return this.value === other.value;
+		return this.compare(other) === 0;
 	}
 }
 
