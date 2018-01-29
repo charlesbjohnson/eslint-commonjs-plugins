@@ -4,7 +4,7 @@ const Configuration = require('./configuration');
 const Name = exports;
 
 function validate(assignment, path, options) {
-	if (options.disable.some(v => v === path || new RegExp(v).test(path))) {
+	if (options.disable.some(v => new RegExp(v).test(path))) {
 		return {equal: true};
 	}
 

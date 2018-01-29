@@ -9,17 +9,7 @@ describe('Name', () => {
 				Name.validate(
 					'_',
 					'lodash',
-					MergeWith(Options.disabled(), {disable: ['lodash']})
-				)
-			).toEqual({equal: true});
-		});
-
-		test('disable option regex', () => {
-			expect(
-				Name.validate(
-					'$',
-					'vendor/jquery/dist',
-					MergeWith(Options.disabled(), {disable: ['vendor/(jquery|zepto)']})
+					MergeWith(Options.disabled(), {disable: ['^lodash$']})
 				)
 			).toEqual({equal: true});
 		});

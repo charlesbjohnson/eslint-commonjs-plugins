@@ -180,21 +180,21 @@ The options for *local* and *node* `require`s use the same schema, which is the 
 ### `disable`
 
 - `local` default: `[]`
-- `node` default: `["bluebird", "jquery", "lodash", "underscore"]`
+- `node` default: `["^bluebird$", "^jquery$", "^lodash$", "^underscore$"]`
 
 This option is useful for projects that typically use modules with assignment names that deliberately don't follow the enforced rules but are still common enough that they can't be disabled individually every time they are used.
 This is typical for *node* `require` types where module names such as `jquery` `lodash`, or `underscore` are assigned to variables like `$` and `_`.
 
-Instead of having to add a disable directive every time these appear, they can be globally disabled in the *node* configuration object, like so:
+Instead of having to add an `eslint-disable` directive every time these appear, they can be globally disabled in the *node* configuration object, like so:
 
 ```json
-"commonjs-require-name/rule": ["error", {}, {"disable": ["jquery", "lodash", "underscore"]}]
+"commonjs-require-name/rule": ["error", null, {"disable": ["^bluebird$", "^jquery$", "^lodash$"]}]
 ```
 
 Projects with *local* modules that have a similar issue, meanwhile, can be disabled in the *local* configuration object with a flexible regex.
 
 ```json
-"commonjs-require-name/rule": ["error", {"disable": ["vendor/(lodash|underscore)"]}, {}]
+"commonjs-require-name/rule": ["error", {"disable": ["vendor/(bluebird|jquery|lodash)/dist"]}, null]
 ```
 
 This can be useful for projects that use vendored dependencies.

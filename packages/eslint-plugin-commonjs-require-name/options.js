@@ -111,7 +111,7 @@ function node(options) {
 	return merge(
 		disabled(),
 		{
-			disable: ['bluebird', 'jquery', 'lodash', 'underscore'],
+			disable: ['^bluebird$', '^jquery$', '^lodash$', '^underscore$'],
 			namespace: {
 				separators: ['.']
 			},
