@@ -50,12 +50,27 @@ Any given `require` is categorized into one of two buckets:
 2. A **node** module `require`.
 
 A **local** module `require` refers to files that exist only within the project.
-Generally this is a `require` string that is a relative filepath, like so:
+Generally this is a `require` string that is a relative filepath.
+
+For example, a project that has this structure:
+
+```sh
+$ tree
+.
+├── index.js
+└── app
+    └── models
+        ├── data.json
+        ├── index.js
+        └── user.js
+```
+
+Could have these **local** `require`s:
 
 ```js
-const model = require("./model");          // a local index file
-const user = require("./model/user");      // a local file
-const data = require("./model/data.json"); // a local json file
+const models = require("./app/models");         // a local index file
+const user = require("./app/models/user");      // a local file
+const data = require("./app/models/data.json"); // a local json file
 ```
 
 A **node** module `require` refers to builtin modules or those that were installed in `node_modules/`, such as:
@@ -77,55 +92,55 @@ The *name* tokens are usually the last token(s) to appear and are preceeded by a
 Here are some examples of how module names are parsed:
 
 ```js
-// app/server.js
+// index.js
 
-require("lodash/findBy")    // [lodash, find, by]
-                            //  ^^^^^^  ^^^^  ^^
-                            //  |       |     |
-                            //  |       name  name
-                            //  namespace
+require("lodash/findBy"); // [lodash, find, by]
+                          //  ^^^^^^  ^^^^  ^^
+                          //  |       |     |
+                          //  |       name  name
+                          //  namespace
 
-require("@babel/types")     // [babel, types]
-                            //  ^^^^^  ^^^^^
-                            //  |      |
-                            //  |      name
-                            //  namespace
+require("@babel/types"); // [babel, types]
+                         //  ^^^^^  ^^^^^
+                         //  |      |
+                         //  |      name
+                         //  namespace
 
-require("./db/models")      // [db, models]
-                            //  ^^  ^^^^^^
-                            //  |   |
-                            //  |   name
-                            //  namespace
+require("./app/models"); // [app, models]
+                         //  ^^  ^^^^^^
+                         //  |   |
+                         //  |   name
+                         //  namespace
 
-require("./db/models/user") // [db, models, user]
-                            //  ^^  ^^^^^^  ^^^^
-                            //  |   |       |
-                            //  |   |       name
-                            //  |   namespace
-                            //  namespace
+require("./app/models/user"); // [app, models, user]
+                              //  ^^  ^^^^^^  ^^^^
+                              //  |   |       |
+                              //  |   |       name
+                              //  |   namespace
+                              //  namespace
 
-// app/controller/user.js
+// app/controllers/user.js
 
-require("../models/user")   // [models, user]
-                            //  ^^^^^^  ^^^^
-                            //  |       |
-                            //  |       name
-                            //  namespace
+require("../models/user"); // [models, user]
+                           //  ^^^^^^  ^^^^
+                           //  |       |
+                           //  |       name
+                           //  namespace
 
-require("../models")        // [models]
-                            //  ^^^^^^
-                            //  |
-                            //  name
+require("../models"); // [models]
+                      //  ^^^^^^
+                      //  |
+                      //  name
 
-require("./")               // [controller]
-                            //  ^^^
-                            //  |
-                            //  name
+require("./"); // [controllers]
+               //  ^^^
+               //  |
+               //  name
 
-require("../")            // [app]
-                            //  ^^^
-                            //  |
-                            //  name
+require("../"); // [app]
+                //  ^^^
+                //  |
+                //  name
 ```
 
 Although there are other optional behaviors that depend on the type of token, the only **non-configurable behavior** is that a module assignment must always include the *name* token(s) parsed from the module name.
@@ -133,22 +148,24 @@ These examples conform to this behavior and would not be reported (although they
 
 ```js
 const childProcess = require("child_process");
-const hasKey = require("lodash/has");
+
+const has = require("lodash/has");
 const traverse = require("@babel/traverse")
 
-const data = require("./model/data.json");
-const userModel = require("./model/user");
+const data = require("./app/models/data.json");
+const user = require("./app/models/user");
 ```
 
 These examples, meanwhile, would be reported for this rule:
 
 ```js
 const child = require("child_process");
-const key = require("lodash/has");
-const babel = require("@babel/traverse");
 
-const model = require("./model/data.json");
-const foo = require("./model/user");
+const babel = require("@babel/traverse");
+const key = require("lodash/has");
+
+const models = require("./app/models/data.json");
+const usr = require("./app/models/user");
 ```
 
 ## Options
@@ -158,8 +175,8 @@ Three options arguments are accepted:
 ```js
 "commonjs-require-name/rule": [
   "error"                     // the eslint error level,
-  {"order": "any"},           // options for local requires
-  {"order": "left-to-right"}  // options for node requires
+  {"order": "any"},           // options object for local requires
+  {"order": "left-to-right"}  // options object for node requires
 ]
 ```
 
@@ -224,7 +241,7 @@ $ tree
         └── user.js
 ```
 
-Might `require` each of the `user.js` modules like so:
+Might have a file that `require`s each of the `user.js` modules like so:
 
 ```js
 // in app/index.js
@@ -242,17 +259,18 @@ This means that `controller` on the left would be matched with either `controlle
 To enable this rule for *local* `require`s:
 
 ```json
-"commonjs-require-name/rule": ["error", {"namespace": {"canonicalize": true}}, {}]
+"commonjs-require-name/rule": ["error", {"namespace": {"canonicalize": true}}, null]
 ```
 
 Note, however, that this option **only** affects `namespace` tokens.
-Even with the configuration enabled, this will still be reported:
+Even with this option enabled, these will still be reported:
 
 ```js
-const thing = require("./things"); //reported
+const otherThing = require("other-things"); // reported
+const thing = require("./things");          // reported
 ```
 
-This is because `things` is parsed as a `name` token (since it is the name of the module), whereas `controllers`, `models`, and `views` are parsed as `namespace` tokens.
+This is because `things` is parsed as a `name` token since it is the name of the module, whereas `controllers`, `models`, and `views` are parsed as `namespace` tokens.
 
 #### `namespace.separators`
 
@@ -272,7 +290,7 @@ This would be reported since the rule would not be able to differentiate that `l
 With this option in the *node* configuration options, however, it would not be reported since `lodash` would be properly categorized as a `namespace` token.
 
 ```json
-"commonjs-require-name/rule": ["error", {}, {"namespace": {"separators": ["."]}}]
+"commonjs-require-name/rule": ["error", null, {"namespace": {"separators": ["."]}}]
 ```
 
 ### `order`
@@ -281,24 +299,30 @@ With this option in the *node* configuration options, however, it would not be r
 - `node` default: `"left-to-right"`
 
 This option specifies the order in which module assignment tokens should appear relative to the module name.
-Tokens can be omitted but the main requirement is that the tokens that the module assignment and the module name have in common must match in the configured order.
+Tokens can be omitted and extraneous tokens can be added but the main requirement is that the tokens that the module assignment and the module name have in common must match in the configured order.
 
 Here are some examples:
 
 ```js
-// "commonjs-require-name/rule": ["error", {}, {"order": "left-to-right"}]
+// "commonjs-require-name/rule": ["error", null, {"order": "left-to-right"}]
+
 const childProcess = require("child_process");                // ok
 const get = require("lodash/fp/get");                         // ok
 const intersectionByFP = require("lodash/fp/intersectionBy"); // reported
 
-// "commonjs-require-name/rule": ["error", {"order": "right-to-left"}, {}]
-const userController = require("./controller/user"); // ok
-const viewUser = require("./view/user");             // reported
 
-// "commonjs-require-name/rule": ["error", {"order": "any"}, {}]
-const follower = require("./db/model/follower"); // ok
-const dbUserModel = require("./db/model/user");  // ok
-const noMatches = require("./db/model");         // reported
+// "commonjs-require-name/rule": ["error", {"order": "right-to-left"}, null]
+
+const userControllers = require("./app/controllers/user"); // ok
+const userModels = require("./app/models/user");           // ok
+const viewsUser = require("./app/views/user");             // reported
+
+
+// "commonjs-require-name/rule": ["error", {"order": "any"}, null]
+
+const follower = require("./app/models/follower");    // ok
+const userAppModelsV3 = require("./app/models/user"); // ok
+const noMatch = require("./app/models");              // reported
 ```
 
 ### `strict`
@@ -315,14 +339,16 @@ Enabling this option specifies that the module assignment must use the same numb
 Here are some examples:
 
 ```js
-// "commonjs-require-name/rule": ["error", {}, {"strict": {"size": true}}]
+// "commonjs-require-name/rule": ["error", null, {"strict": {"size": true}}]
+
 const babelTraverse = require("@babel/traverse"); // ok
 const types = require("@babel/types");            // reported
 
 
-// "commonjs-require-name/rule": ["error", {"strict": {"size": true}}, {}]
-const dbFollowerModel = require("./db/model/follower"); // ok
-const user = require("./db/model/user");                // reported
+// "commonjs-require-name/rule": ["error", {"strict": {"size": true}}, null]
+
+const followerAppModels = require("./app/models/follower"); // ok
+const user = require("./app/models/user");                  // reported
 ```
 
 #### `strict.tokens`
@@ -335,13 +361,16 @@ Enabling this option specifies that the module assignment must not use any addit
 Here are some examples:
 
 ```js
-// "commonjs-require-name/rule": ["error", {}, {"strict": {"tokens": true}}]
+// "commonjs-require-name/rule": ["error", null, {"strict": {"tokens": true}}]
+
 const traverse = require("@babel/traverse"); // ok
 const babbleTypes = require("@babel/types"); // reported
 
-// "commonjs-require-name/rule": ["error", {"strict": {"tokens": true}}, {}]
-const followerModel = require("./db/model/follower");      // ok
-const companyNameDBUserModel = require("./db/model/user"); // reported
+
+// "commonjs-require-name/rule": ["error", {"strict": {"tokens": true}}, null]
+
+const followerModels = require("./app/models/follower"); // ok
+const userModelsV2 = require("./app/models/user");       // reported
 ```
 
 ### `strip`
@@ -355,7 +384,8 @@ This is typically useful for module names that include file extensions or top-le
 Here are some examples:
 
 ```js
-// "commonjs-require-name/rule": ["error", {}, {"strip": [".js", ".io"]}]
+// "commonjs-require-name/rule": ["error", null, {"strip": [".js", ".io"]}]
+
 const decimal = require("decimal.js");      // ok
 const socket = require("socket.io");        // ok
 const normalize = require("normalize.css"); // reported
@@ -365,10 +395,15 @@ Note that file extensions **are not parsed** and do not need to be stripped.
 
 ```js
 // "commonjs-require-name/rule": ["error", {"strip": [".js"]}, {"strip": [".js"]}]
-const get = require("lodash/get.js"); // ok
-const user = require("./user.js");    // ok
 
-// "commonjs-require-name/rule": ["error", {}, {}]
-const get = require("lodash/get.js"); // ok
-const user = require("./user.js");    // ok
+const get = require("lodash/get.js");  // ok
+const user = require("./user.js");     // ok
+const decimal = require("decimal.js"); // ok
+
+
+// "commonjs-require-name/rule": ["error", {"strip": []}, {"strip": []}]
+
+const get = require("lodash/get.js");  // ok
+const user = require("./user.js");     // ok
+const decimal = require("decimal.js"); // reported
 ```
