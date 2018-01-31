@@ -1,4 +1,5 @@
 const Path = require('path');
+
 const Local = require('./local');
 
 function absolute(path) {

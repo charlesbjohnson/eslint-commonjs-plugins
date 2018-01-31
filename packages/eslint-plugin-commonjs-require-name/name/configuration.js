@@ -1,4 +1,5 @@
 const Get = require('lodash.get');
+
 const Collection = require('./collection');
 const Comparator = require('./comparator');
 

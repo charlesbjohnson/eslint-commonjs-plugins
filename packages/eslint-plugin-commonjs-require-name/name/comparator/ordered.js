@@ -1,4 +1,5 @@
 const IntersectionWith = require('lodash.intersectionwith');
+
 const Collection = require('../collection');
 
 const Ordered = exports;

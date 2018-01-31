@@ -80,6 +80,24 @@
         {
           "capIsNew": false
         }
+      ],
+      "import/order": [
+        "error",
+        {
+          "groups": [
+            [
+              "builtin",
+              "external",
+              "internal"
+            ],
+            [
+              "index",
+              "parent",
+              "sibling"
+            ]
+          ],
+          "newlines-between": "always"
+        }
       ]
     }
   }

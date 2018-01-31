@@ -1,6 +1,7 @@
 const MergeWith = require('lodash.mergewith');
-const Options = require('../options');
+
 const Name = require('./');
+const Options = require('../options');
 
 describe('Name', () => {
 	describe('.validate', () => {

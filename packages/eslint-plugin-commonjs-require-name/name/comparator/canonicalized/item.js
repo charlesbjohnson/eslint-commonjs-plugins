@@ -1,4 +1,5 @@
 const Pluralize = require('pluralize');
+
 const Collection = require('../../collection');
 
 class Item extends Collection.Item {

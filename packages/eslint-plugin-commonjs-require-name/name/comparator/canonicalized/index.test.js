@@ -1,7 +1,6 @@
+const Canonicalized = require('./');
 const Collection = require('../../collection');
 const Item = require('./item');
-
-const Canonicalized = require('./');
 
 describe('Canonicalized', () => {
 	describe('.instance', () => {

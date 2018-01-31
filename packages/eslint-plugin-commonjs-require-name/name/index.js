@@ -1,4 +1,5 @@
 const EscapeRegExp = require('lodash.escaperegexp');
+
 const Configuration = require('./configuration');
 
 const Name = exports;

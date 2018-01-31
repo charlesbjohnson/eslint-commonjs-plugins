@@ -1,7 +1,6 @@
-const Path = require('path');
-
 const EscapeRegExp = require('lodash.escaperegexp');
 const Get = require('lodash.get');
+const Path = require('path');
 const ValidateNPMPackageName = require('validate-npm-package-name');
 
 const SCOPE = '(?:@([^/]+?)[/])?';

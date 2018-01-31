@@ -1,7 +1,6 @@
-const Path = require('path');
-
 const IsPathInside = require('is-path-inside');
 const IsValidPath = require('is-valid-path');
+const Path = require('path');
 const PkgDir = require('pkg-dir');
 
 const Local = exports;
