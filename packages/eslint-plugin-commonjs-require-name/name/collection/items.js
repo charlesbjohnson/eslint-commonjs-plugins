@@ -8,7 +8,8 @@ class Items {
 	}
 
 	constructor(string) {
-		this.value = [];
+		this._value = [];
+
 		if (!string) {
 			return;
 		}
@@ -23,7 +24,7 @@ class Items {
 		const name = parts[parts.length - 1];
 		const namespaces = parts.slice(0, -1);
 
-		this.value = namespaces
+		this._value = namespaces
 			.reduce(
 				(accumulator, namespace) =>
 					accumulator.concat(itemize(namespace, true)),
@@ -32,12 +33,68 @@ class Items {
 			.concat(itemize(name, false));
 	}
 
-	equals(other) {
-		return other instanceof Items;
+	*[Symbol.iterator]() {
+		yield* this._value;
 	}
 
-	values() {
-		return this.value.map(item => item.value);
+	clone() {
+		const result = new this.constructor();
+		result._value = this._value.slice();
+		return result;
+	}
+
+	indexOf(options) {
+		const {left, right} = Object.assign(
+			{
+				left: null,
+				right: null
+			},
+			options
+		);
+
+		if (!left && !right) {
+			return -1;
+		}
+
+		return this._value.findIndex(v => {
+			if (right) {
+				return v.equals(right);
+			}
+
+			return left.equals(v);
+		});
+	}
+
+	index(i) {
+		return this._value[i];
+	}
+
+	length() {
+		return this._value.length;
+	}
+
+	names() {
+		const result = this.clone();
+		result._value = this._value.filter(item => !item.namespace);
+		return result;
+	}
+
+	pullAt(i) {
+		const result = this.clone();
+		result._value.splice(i, 1);
+		return result;
+	}
+
+	reverse() {
+		const result = this.clone();
+		result._value.reverse();
+		return result;
+	}
+
+	sort() {
+		const result = this.clone();
+		result._value.sort((a, b) => a.compare(b));
+		return result;
 	}
 }
 
