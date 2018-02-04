@@ -6,7 +6,7 @@ const Name = exports;
 
 function validate(assignment, path, options) {
 	if (options.disable.some(v => new RegExp(v).test(path))) {
-		return {equal: true};
+		return {equal: true, error: null};
 	}
 
 	path = options.strip.reduce(
@@ -36,18 +36,7 @@ function validate(assignment, path, options) {
 		configuration = Configuration.canonicalize(configuration);
 	}
 
-	const equal = Configuration.comparator(configuration)(assignment, path);
-	if (equal) {
-		return {equal};
-	}
-
-	return {
-		equal,
-		value: {
-			actual: Configuration.valuator()(assignment),
-			expected: Configuration.valuator(configuration)(path)
-		}
-	};
+	return Configuration.validate(configuration, assignment, path);
 }
 
 Name.validate = validate;

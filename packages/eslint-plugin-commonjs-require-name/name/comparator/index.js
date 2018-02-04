@@ -1,11 +1,24 @@
-const Canonicalized = require('./canonicalized');
-const Named = require('./named');
-const Ordered = require('./ordered');
+const Name = require('./name');
+const Order = require('./order');
 const Strict = require('./strict');
 
 const Comparator = exports;
 
-Comparator.Canonicalized = Canonicalized;
-Comparator.Named = Named;
-Comparator.Ordered = Ordered;
+const Default = {
+	instance() {
+		return {
+			compare() {
+				return true;
+			},
+
+			error() {
+				return null;
+			}
+		};
+	}
+};
+
+Comparator.Default = Default;
+Comparator.Name = Name;
+Comparator.Order = Order;
 Comparator.Strict = Strict;

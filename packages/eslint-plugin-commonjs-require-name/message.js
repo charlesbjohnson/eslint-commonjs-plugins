@@ -1,12 +1,11 @@
 const Message = exports;
 
-function error({assignment, path, value: {expected}}) {
-	return `module assignment '${assignment}' does not match module name '${path}', \
-expected tokens: '[${expected.join(', ')}]'.`;
+function error(message) {
+	return `mismatched module assignment and name: ${message}`;
 }
 
-function fail({path}) {
-	return `invalid require argument '${path}'`;
+function fail() {
+	return 'invalid require argument';
 }
 
 Message.error = error;

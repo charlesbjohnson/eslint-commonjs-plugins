@@ -6,133 +6,127 @@ const Options = require('../options');
 describe('Name', () => {
 	describe('.validate', () => {
 		test('disable option', () => {
-			expect(
-				Name.validate(
-					'_',
-					'lodash',
-					MergeWith(Options.disabled(), {disable: ['^lodash$']})
-				)
-			).toEqual({equal: true});
+			const result = Name.validate(
+				'_',
+				'lodash',
+				MergeWith(Options.disabled(), {disable: ['^lodash$']})
+			);
+
+			expect(result.equal).toBe(true);
+			expect(result.error).toBeNull();
 		});
 
 		test('strip option', () => {
-			expect(
-				Name.validate(
-					'spaceName',
-					'space.io/name',
-					MergeWith(Options.disabled(), {strip: ['.io']})
-				)
-			).toEqual({equal: true});
+			const result = Name.validate(
+				'spaceName',
+				'space.io/name',
+				MergeWith(Options.disabled(), {strip: ['.io']})
+			);
+
+			expect(result.equal).toBe(true);
+			expect(result.error).toBeNull();
 		});
 
 		test('name', () => {
-			expect(
-				Name.validate('spaceThing', 'space/thing/name', Options.disabled())
-			).toEqual({
-				equal: false,
-				value: {
-					actual: ['space', 'thing'],
-					expected: ['space', 'thing', 'name']
-				}
-			});
+			const result = Name.validate(
+				'spaceThing',
+				'space/thing/name',
+				Options.disabled()
+			);
+
+			expect(result.equal).toBe(false);
+			expect(result.error).not.toBeNull();
 		});
 
 		test('order', () => {
-			expect(
-				Name.validate('not', 'space/thing/name', Options.disabled())
-			).toEqual({
-				equal: false,
-				value: {
-					actual: ['not'],
-					expected: ['space', 'thing', 'name']
-				}
-			});
+			const result = Name.validate(
+				'not',
+				'space/thing/name',
+				Options.disabled()
+			);
+
+			expect(result.equal).toBe(false);
+			expect(result.error).not.toBeNull();
 		});
 
 		test('order option', () => {
-			expect(
-				Name.validate(
-					'nameThingSpace',
-					'space/thing/name',
-					MergeWith(Options.disabled(), {order: 'right-to-left'})
-				)
-			).toEqual({equal: true});
+			const result = Name.validate(
+				'nameThingSpace',
+				'space/thing/name',
+				MergeWith(Options.disabled(), {order: 'right-to-left'})
+			);
+
+			expect(result.equal).toBe(true);
+			expect(result.error).toBeNull();
 		});
 
 		test('strict size option', () => {
-			expect(
-				Name.validate(
-					'thingName',
-					'space/thing/name',
-					MergeWith(Options.disabled(), {strict: {size: true}})
-				)
-			).toEqual({
-				equal: false,
-				value: {
-					actual: ['thing', 'name'],
-					expected: ['space', 'thing', 'name']
-				}
-			});
+			const result = Name.validate(
+				'thingName',
+				'space/thing/name',
+				MergeWith(Options.disabled(), {strict: {size: true}})
+			);
+
+			expect(result.equal).toBe(false);
+			expect(result.error).not.toBeNull();
 		});
 
 		test('strict tokens option', () => {
-			expect(
-				Name.validate(
-					'nameFoo',
-					'space/thing/name',
-					MergeWith(Options.disabled(), {
-						order: 'any',
-						strict: {tokens: true}
-					})
-				)
-			).toEqual({
-				equal: false,
-				value: {
-					actual: ['name', 'foo'],
-					expected: ['space', 'thing', 'name']
-				}
-			});
+			const result = Name.validate(
+				'nameFoo',
+				'space/thing/name',
+				MergeWith(Options.disabled(), {
+					order: 'any',
+					strict: {tokens: true}
+				})
+			);
+
+			expect(result.equal).toBe(false);
+			expect(result.error).not.toBeNull();
 		});
 
 		test('namespace canonicalize option', () => {
-			expect(
-				Name.validate(
-					'spaceName',
-					'spaces/name',
-					MergeWith(Options.disabled(), {namespace: {canonicalize: true}})
-				)
-			).toEqual({equal: true});
+			const result = Name.validate(
+				'spaceName',
+				'spaces/name',
+				MergeWith(Options.disabled(), {namespace: {canonicalize: true}})
+			);
+
+			expect(result.equal).toBe(true);
+			expect(result.error).toBeNull();
 		});
 
 		test('namespace separators option', () => {
-			expect(
-				Name.validate(
-					'spaceName',
-					'space-X-name',
-					MergeWith(Options.disabled(), {namespace: {separators: ['-X-']}})
-				)
-			).toEqual({equal: true});
+			const result = Name.validate(
+				'spaceName',
+				'space-X-name',
+				MergeWith(Options.disabled(), {namespace: {separators: ['-X-']}})
+			);
+
+			expect(result.equal).toBe(true);
+			expect(result.error).toBeNull();
 		});
 
 		test('composition', () => {
-			expect(
-				Name.validate(
-					'scopeThingName',
-					'scope.lol-things/name',
-					MergeWith(Options.disabled(), {
-						namespace: {
-							separators: ['.'],
-							canonicalize: true
-						},
-						order: 'left-to-right',
-						strict: {
-							size: true,
-							tokens: true
-						},
-						strip: ['.lol']
-					})
-				)
-			).toEqual({equal: true});
+			const result = Name.validate(
+				'scopeThingName',
+				'scope.lol-things/name',
+				MergeWith(Options.disabled(), {
+					namespace: {
+						separators: ['.'],
+						canonicalize: true
+					},
+					order: 'left-to-right',
+					strict: {
+						size: true,
+						tokens: true
+					},
+					strip: ['.lol']
+				})
+			);
+
+			expect(result.equal).toBe(true);
+			expect(result.error).toBeNull();
 		});
 	});
 });

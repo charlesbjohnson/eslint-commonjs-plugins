@@ -35,7 +35,7 @@ class RequireName {
 				resolver = () => Module.Node.resolve(path);
 				break;
 			default:
-				this.context.report({message: Message.fail({path}), node});
+				this.context.report({message: Message.fail(), node});
 				return;
 		}
 
@@ -43,12 +43,10 @@ class RequireName {
 			return;
 		}
 
-		path = resolver();
-		const result = Name.validate(assignment, path, options);
-
+		const result = Name.validate(assignment, resolver(), options);
 		if (!result.equal) {
 			this.context.report({
-				message: Message.error({assignment, path, value: result.value}),
+				message: Message.error(result.error),
 				node
 			});
 		}

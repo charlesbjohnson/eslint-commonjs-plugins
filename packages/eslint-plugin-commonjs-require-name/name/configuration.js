@@ -1,41 +1,31 @@
 const Get = require('lodash.get');
 
+const Behavior = require('./behavior');
 const Collection = require('./collection');
 const Comparator = require('./comparator');
 
 const Configuration = exports;
 
 class Config {
-	constructor(type, types = []) {
-		this.types = new Set(types);
+	constructor(type, instance) {
+		this._types = new Set();
+
+		if (instance) {
+			this._types = new Set([...instance]);
+		}
 
 		if (type) {
-			this.types.add(type);
+			this._types.add(type);
 		}
 	}
 
-	get values() {
-		return [...this.types.values()];
+	*[Symbol.iterator]() {
+		yield* this._types;
 	}
 }
 
 function canonicalize(configuration) {
-	return new Config('Canonicalized', configuration.types);
-}
-
-function comparator(configuration) {
-	return (actual, expected) => {
-		return configure(Collection.Items.instance(expected), configuration).equals(
-			Collection.Items.instance(actual)
-		);
-	};
-}
-
-function configure(collection, configuration) {
-	return configuration.values.reduce(
-		(collection, type) => Get(Comparator, type).instance(collection),
-		collection
-	);
+	return new Config('Canonical', configuration);
 }
 
 function instance() {
@@ -43,47 +33,50 @@ function instance() {
 }
 
 function name(configuration) {
-	return new Config('Named', configuration.types);
+	return new Config('Name', configuration);
 }
 
 function order(configuration, order) {
 	const types = {
-		any: 'Ordered.Any',
-		'left-to-right': 'Ordered.LeftToRight',
-		'right-to-left': 'Ordered.RightToLeft'
+		any: 'Order.Any',
+		'left-to-right': 'Order.LeftToRight',
+		'right-to-left': 'Order.RightToLeft'
 	};
 
-	return new Config(
-		Get(types, order, 'Ordered.LeftToRight'),
-		configuration.types
-	);
+	return new Config(Get(types, order, 'Order.LeftToRight'), configuration);
 }
 
 function size(configuration) {
-	return new Config('Strict.Size', configuration.values);
+	return new Config('Strict.Size', configuration);
 }
 
 function tokens(configuration) {
-	return new Config('Strict.Tokens', configuration.values);
+	return new Config('Strict.Tokens', configuration);
 }
 
-function valuator(configuration) {
-	return string => {
-		let collection = Collection.Items.instance(string);
+function validate(configuration, actual, expected) {
+	actual = Collection.Items.instance(actual);
+	expected = Collection.Items.instance(expected);
 
-		if (configuration) {
-			collection = configure(collection, configuration);
+	for (const type of configuration) {
+		expected = Get(Behavior, type, Behavior.Default).instance(expected);
+	}
+
+	for (const type of configuration) {
+		const comparator = Get(Comparator, type, Comparator.Default).instance();
+
+		if (!comparator.compare(actual, expected)) {
+			return {equal: false, error: comparator.error()};
 		}
+	}
 
-		return collection.values();
-	};
+	return {equal: true, error: null};
 }
 
 Configuration.canonicalize = canonicalize;
-Configuration.comparator = comparator;
 Configuration.instance = instance;
 Configuration.name = name;
 Configuration.order = order;
 Configuration.size = size;
 Configuration.tokens = tokens;
-Configuration.valuator = valuator;
+Configuration.validate = validate;
