@@ -16,10 +16,8 @@
   "dependencies": {
     "is-path-inside": "^1.0.1",
     "is-valid-path": "^0.1.1",
-    "lodash.differencewith": "^4.5.0",
     "lodash.escaperegexp": "^4.1.2",
     "lodash.get": "^4.4.2",
-    "lodash.intersectionwith": "^4.4.0",
     "lodash.mergewith": "^4.6.0",
     "no-case": "^2.3.2",
     "pkg-dir": "^2.0.0",
