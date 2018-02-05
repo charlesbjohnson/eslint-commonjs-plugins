@@ -18,7 +18,7 @@
     "is-valid-path": "^0.1.1",
     "lodash.escaperegexp": "^4.1.2",
     "lodash.get": "^4.4.2",
-    "lodash.mergewith": "^4.6.0",
+    "lodash.mergewith": "^4.6.1",
     "no-case": "^2.3.2",
     "pkg-dir": "^2.0.0",
     "pluralize": "^7.0.0",

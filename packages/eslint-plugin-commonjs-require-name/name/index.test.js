@@ -1,5 +1,3 @@
-const MergeWith = require('lodash.mergewith');
-
 const Name = require('./');
 const Options = require('../options');
 
@@ -9,7 +7,7 @@ describe('Name', () => {
 			const result = Name.validate(
 				'_',
 				'lodash',
-				MergeWith(Options.disabled(), {disable: ['^lodash$']})
+				Options.merge(Options.disabled(), {disable: ['^lodash$']})
 			);
 
 			expect(result.equal).toBe(true);
@@ -20,7 +18,7 @@ describe('Name', () => {
 			const result = Name.validate(
 				'spaceName',
 				'space.io/name',
-				MergeWith(Options.disabled(), {strip: ['.io']})
+				Options.merge(Options.disabled(), {strip: ['.io']})
 			);
 
 			expect(result.equal).toBe(true);
@@ -53,7 +51,7 @@ describe('Name', () => {
 			const result = Name.validate(
 				'nameThingSpace',
 				'space/thing/name',
-				MergeWith(Options.disabled(), {order: 'right-to-left'})
+				Options.merge(Options.disabled(), {order: 'right-to-left'})
 			);
 
 			expect(result.equal).toBe(true);
@@ -64,7 +62,7 @@ describe('Name', () => {
 			const result = Name.validate(
 				'thingName',
 				'space/thing/name',
-				MergeWith(Options.disabled(), {strict: {size: true}})
+				Options.merge(Options.disabled(), {strict: {size: true}})
 			);
 
 			expect(result.equal).toBe(false);
@@ -75,7 +73,7 @@ describe('Name', () => {
 			const result = Name.validate(
 				'nameFoo',
 				'space/thing/name',
-				MergeWith(Options.disabled(), {
+				Options.merge(Options.disabled(), {
 					order: 'any',
 					strict: {tokens: true}
 				})
@@ -89,7 +87,7 @@ describe('Name', () => {
 			const result = Name.validate(
 				'spaceName',
 				'spaces/name',
-				MergeWith(Options.disabled(), {namespace: {canonicalize: true}})
+				Options.merge(Options.disabled(), {namespace: {canonicalize: true}})
 			);
 
 			expect(result.equal).toBe(true);
@@ -100,7 +98,7 @@ describe('Name', () => {
 			const result = Name.validate(
 				'spaceName',
 				'space-X-name',
-				MergeWith(Options.disabled(), {namespace: {separators: ['-X-']}})
+				Options.merge(Options.disabled(), {namespace: {separators: ['-X-']}})
 			);
 
 			expect(result.equal).toBe(true);
@@ -111,7 +109,7 @@ describe('Name', () => {
 			const result = Name.validate(
 				'scopeThingName',
 				'scope.lol-things/name',
-				MergeWith(Options.disabled(), {
+				Options.merge(Options.disabled(), {
 					namespace: {
 						separators: ['.'],
 						canonicalize: true

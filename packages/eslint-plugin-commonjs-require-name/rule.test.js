@@ -1,5 +1,4 @@
 const ESLint = require('eslint');
-const MergeWith = require('lodash.mergewith');
 
 const Options = require('./options');
 const Rule = require('./rule');
@@ -13,7 +12,7 @@ function invalid(cases, options) {
 }
 
 function options(obj) {
-	return MergeWith(Options.disabled(), obj);
+	return Options.merge(Options.disabled(), obj);
 }
 
 describe('Rule', () => {

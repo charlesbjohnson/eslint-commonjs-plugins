@@ -128,4 +128,5 @@ function node(options) {
 Options.SCHEMA = SCHEMA;
 Options.disabled = disabled;
 Options.local = local;
+Options.merge = merge;
 Options.node = node;
