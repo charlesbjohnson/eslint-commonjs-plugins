@@ -4,7 +4,7 @@
   "author": "Charles B Johnson <mail@cbjohnson.info> (cbjohnson.info)",
   "license": "MIT",
   "repository": "charlesbjohnson/eslint-module-plugins",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "main": "plugin.js",
   "scripts": {
     "lint": "xo",
