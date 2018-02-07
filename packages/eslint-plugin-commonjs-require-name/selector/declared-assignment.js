@@ -1,6 +1,7 @@
 const DeclaredAssignment = exports;
 
 const SELECTOR = `VariableDeclarator\
+[id.type=Identifier]\
 [init.type=CallExpression]\
 [init.callee.type=Identifier]\
 [init.callee.name=require]\
