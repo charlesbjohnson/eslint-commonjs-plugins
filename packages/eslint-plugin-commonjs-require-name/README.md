@@ -40,7 +40,7 @@
 ## Summary
 
 This plugin contains a single rule, `commonjs-require-name/rule`, that enforces a naming convention for `require` module assignments.
-The rule checks that the name of the *module assignment* reflects the *module name* that is `require`d.
+The rule checks that the name of the *module assignment* matches the *module name* that is `require`d.
 
 #### `require` Types
 
@@ -174,7 +174,7 @@ Three options arguments are accepted:
 
 ```js
 "commonjs-require-name/rule": [
-  "error"                     // the eslint error level,
+  "error"                     // the eslint error level
   {"order": "any"},           // options object for local requires
   {"order": "left-to-right"}  // options object for node requires
 ]
@@ -196,11 +196,11 @@ The options for *local* and *node* `require`s use the same schema, which is the 
 
 ### `disable`
 
-- `local` default: `[]`
-- `node` default: `["^bluebird$", "^jquery$", "^lodash$", "^underscore$"]`
+- Default for `local`: `[]`
+- Default for `node`: `["^bluebird$", "^jquery$", "^lodash$", "^underscore$"]`
 
 This option is useful for projects that typically use modules with assignment names that deliberately don't follow the enforced rules but are still common enough that they can't be disabled individually every time they are used.
-This is typical for *node* `require` types where module names such as `jquery` `lodash`, or `underscore` are assigned to variables like `$` and `_`.
+This is typical for *node* `require` types where module names such as `jquery`, `lodash`, or `underscore` are assigned to variables like `$` and `_`.
 
 Instead of having to add an `eslint-disable` directive every time these appear, they can be globally disabled in the *node* configuration object, like so:
 
@@ -222,8 +222,8 @@ These options configure how matches against the `namespace` tokens of a module n
 
 #### `namespace.canonicalize`
 
-- `local` default: `true`
-- `node` default: `false`
+- Default for `local`: `true`
+- Default for `node`: `false`
 
 This option is useful for projects that group related files into plural namespaces, but still use the singular form in code at module assignment.
 For example, a project that uses this directory structure:
@@ -274,8 +274,8 @@ This is because `things` is parsed as a `name` token since it is the name of the
 
 #### `namespace.separators`
 
-- `local` default: `[]`
-- `node` default: `["."]`
+- Default for `local`: `[]`
+- Default for `node`: `["."]`
 
 This option is useful for parsing `namespace` tokens that otherwise would be indistinguishable from `name` tokens.
 This is typical for *node* modules that use a `.` to differentiate between a project name and the module name.
@@ -295,8 +295,9 @@ With this option in the *node* configuration options, however, it would not be r
 
 ### `order`
 
-- `local` default: `"any"`
-- `node` default: `"left-to-right"`
+- Valid values: `"any"`, `"left-to-right"`, `"right-to-left"`
+- Default for `local`: `"any"`
+- Default for `node`: `"left-to-right"`
 
 This option specifies the order in which module assignment tokens should appear relative to the module name.
 Tokens can be omitted and extraneous tokens can be added but the main requirement is that the tokens that the module assignment and the module name have in common must match in the configured order.
@@ -331,8 +332,8 @@ These options configure how strictly module assignments are compared to module n
 
 #### `strict.size`
 
-- `local` default: `false`
-- `node` default: `false`
+- Default for `local`: `false`
+- Default for `node`: `false`
 
 Enabling this option specifies that the module assignment must use the same number of tokens that were parsed in the module name.
 
@@ -353,8 +354,8 @@ const user = require("./app/models/user");                  // reported
 
 #### `strict.tokens`
 
-- `local` default: `true`
-- `node` default: `true`
+- Default for `local`: `true`
+- Default for `node`: `true`
 
 Enabling this option specifies that the module assignment must not use any additional tokens than those that appear in the module name.
 
@@ -375,8 +376,8 @@ const userModelsV2 = require("./app/models/user");       // reported
 
 ### `strip`
 
-- `local` default: `[]`
-- `node` default: `[".js", ".css", ".com", ".org", ".io"]`
+- Default for `local`: `[]`
+- Default for `node`: `[".js", ".css", ".com", ".org", ".io"]`
 
 This option can be used to strip unwanted text out of module names before they are parsed.
 This is typically useful for module names that include file extensions or top-level domains that, if not included, would be a name that is otherwise already taken on the NPM registry.

@@ -58,14 +58,6 @@ const SCHEMA = [
 	{oneOf: [{type: 'null'}, TYPE_SCHEMA]}
 ];
 
-function merge(dest, ...sources) {
-	return MergeWith(dest, ...sources, (l, r) => {
-		if (Array.isArray(l)) {
-			return r;
-		}
-	});
-}
-
 function disabled() {
 	return {
 		disable: [],
@@ -80,6 +72,14 @@ function disabled() {
 		},
 		strip: []
 	};
+}
+
+function merge(dest, ...sources) {
+	return MergeWith(dest, ...sources, (l, r) => {
+		if (Array.isArray(l)) {
+			return r;
+		}
+	});
 }
 
 function local(options) {
