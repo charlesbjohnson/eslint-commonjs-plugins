@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+<a name="1.2.0"></a>
+# [1.2.0](https://github.com/charlesbjohnson/eslint-module-plugins/compare/eslint-plugin-commonjs-require-name@1.1.1...eslint-plugin-commonjs-require-name@1.2.0) (2018-02-09)
+
+
+### Features
+
+* **eslint-plugin-commonjs-require-case:** setup plugin ([1677b5e](https://github.com/charlesbjohnson/eslint-module-plugins/commit/1677b5e))
+
+
+
+
 <a name="1.1.1"></a>
 ## [1.1.1](https://github.com/charlesbjohnson/eslint-module-plugins/compare/eslint-plugin-commonjs-require-name@1.1.0...eslint-plugin-commonjs-require-name@1.1.1) (2018-02-07)
 
