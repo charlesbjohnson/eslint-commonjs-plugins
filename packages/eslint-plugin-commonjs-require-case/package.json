@@ -1,0 +1,52 @@
+{
+  "name": "eslint-plugin-commonjs-require-case",
+  "description": "eslint plugin for enforcing a `require` case convention",
+  "author": "Charles B Johnson <mail@cbjohnson.info> (cbjohnson.info)",
+  "license": "MIT",
+  "repository": "charlesbjohnson/eslint-module-plugins",
+  "version": "1.0.0",
+  "main": "plugin.js",
+  "scripts": {
+    "lint": "xo",
+    "test": "jest 2>&1",
+    "test:coverage": "yarn run test && codecov",
+    "test:debug": "node inspect $(which jest) --runInBand",
+    "test:inspect": "node --inspect-brk $(which jest) --runInBand"
+  },
+  "dependencies": {
+    "camel-case": "^3.0.0",
+    "constant-case": "^2.0.0",
+    "deep-extend": "^0.5.0",
+    "lodash.get": "^4.4.2",
+    "lower-case-first": "^1.0.2",
+    "pascal-case": "^2.0.1",
+    "snake-case": "^2.1.0",
+    "upper-case-first": "^1.1.2"
+  },
+  "peerDependencies": {
+    "eslint": ">=0.8.0"
+  },
+  "devDependencies": {
+    "codecov": "^3.0.0",
+    "jest": "^22.1.4",
+    "xo": "^0.18.2"
+  },
+  "keywords": [
+    "case",
+    "casing",
+    "commonjs",
+    "convention",
+    "eslint",
+    "eslint-plugin",
+    "eslintplugin",
+    "require"
+  ],
+  "engines": {
+    "node": ">=6"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "coverageDirectory": "./coverage"
+  },
+  "xo": false
+}
