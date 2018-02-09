@@ -1,5 +1,5 @@
+const DeepExtend = require('deep-extend');
 const Get = require('lodash.get');
-const MergeWith = require('lodash.mergewith');
 
 const Options = exports;
 
@@ -74,12 +74,8 @@ function disabled() {
 	};
 }
 
-function merge(dest, ...sources) {
-	return MergeWith(dest, ...sources, (l, r) => {
-		if (Array.isArray(l)) {
-			return r;
-		}
-	});
+function merge(...args) {
+	return DeepExtend(...args);
 }
 
 function local(options) {
