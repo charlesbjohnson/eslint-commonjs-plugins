@@ -25,8 +25,8 @@ describe('Rule', () => {
 		});
 
 		tester.run('declared assignment', Rule, {
-			valid: valid(['let path = require("path");'], [null, options()]),
-			invalid: invalid(['let not = require("path");'], [null, options()])
+			valid: valid(['const path = require("path");'], [null, options()]),
+			invalid: invalid(['const not = require("path");'], [null, options()])
 		});
 
 		tester.run('multiple', Rule, {
@@ -134,213 +134,221 @@ describe('Rule', () => {
 		});
 	});
 
-	tester.run('readme name', Rule, {
-		valid: valid(
-			[
-				'const childProcess = require("child_process");',
-				'const has = require("lodash/has");',
-				'const traverse = require("@babel/traverse");',
-				'const data = require("./app/models/data.json");',
-				'const user = require("./app/models/user");'
-			],
-			[options(), options()]
-		),
-		invalid: invalid(
-			[
-				'const child = require("child_process");',
-				'const babel = require("@babel/traverse");',
-				'const key = require("lodash/has");',
-				'const models = require("./app/models/data.json");',
-				'const usr = require("./app/models/user");'
-			],
-			[options(), options()]
-		)
-	});
+	describe('readme', () => {
+		tester.run('name', Rule, {
+			valid: valid(
+				[
+					'const childProcess = require("child_process");',
+					'const has = require("lodash/has");',
+					'const traverse = require("@babel/traverse");',
+					'const data = require("./app/models/data.json");',
+					'const user = require("./app/models/user");'
+				],
+				[options(), options()]
+			),
+			invalid: invalid(
+				[
+					'const child = require("child_process");',
+					'const babel = require("@babel/traverse");',
+					'const key = require("lodash/has");',
+					'const models = require("./app/models/data.json");',
+					'const usr = require("./app/models/user");'
+				],
+				[options(), options()]
+			)
+		});
 
-	tester.run('readme disable', Rule, {
-		valid: valid(
-			[
-				'const Promise = require("bluebird");',
-				'const Promise = require("./vendor/bluebird/dist");',
-				'const $ = require("jquery");',
-				'const $ = require("./vendor/jquery/dist");',
-				'const _ = require("lodash");',
-				'const _ = require("./vendor/lodash/dist");'
-			],
-			[
-				options({disable: ['vendor/(bluebird|jquery|lodash)/dist']}),
-				options({disable: ['^bluebird$', '^jquery$', '^lodash$']})
-			]
-		),
-		invalid: invalid(
-			[
-				'const Promise = require("bluebird");',
-				'const $ = require("jquery");',
-				'const _ = require("lodash");'
-			],
-			[options(), options()]
-		)
-	});
+		tester.run('disable', Rule, {
+			valid: valid(
+				[
+					'const Promise = require("bluebird");',
+					'const Promise = require("./vendor/bluebird/dist");',
+					'const $ = require("jquery");',
+					'const $ = require("./vendor/jquery/dist");',
+					'const _ = require("lodash");',
+					'const _ = require("./vendor/lodash/dist");'
+				],
+				[
+					options({disable: ['vendor/(bluebird|jquery|lodash)/dist']}),
+					options({disable: ['^bluebird$', '^jquery$', '^lodash$']})
+				]
+			),
+			invalid: invalid(
+				[
+					'const Promise = require("bluebird");',
+					'const $ = require("jquery");',
+					'const _ = require("lodash");'
+				],
+				[options(), options()]
+			)
+		});
 
-	tester.run('readme namespace canonicalize', Rule, {
-		valid: valid(
-			[
-				'const controllerUser = require("./controllers/user");',
-				'const modelUser = require("./models/user");',
-				'const viewUser = require("./views/user");'
-			],
-			[options({namespace: {canonicalize: true}, strict: {tokens: true}}), null]
-		),
-		invalid: [].concat(
-			invalid(
+		tester.run('namespace canonicalize', Rule, {
+			valid: valid(
 				[
 					'const controllerUser = require("./controllers/user");',
 					'const modelUser = require("./models/user");',
 					'const viewUser = require("./views/user");'
 				],
-				[options({strict: {tokens: true}}), null]
-			),
-			invalid(
-				[
-					'const otherThing = require("other-things");',
-					'const thing = require("./things");'
-				],
 				[
 					options({namespace: {canonicalize: true}, strict: {tokens: true}}),
-					options({namespace: {canonicalize: true}, strict: {tokens: true}})
+					null
 				]
+			),
+			invalid: [].concat(
+				invalid(
+					[
+						'const controllerUser = require("./controllers/user");',
+						'const modelUser = require("./models/user");',
+						'const viewUser = require("./views/user");'
+					],
+					[options({strict: {tokens: true}}), null]
+				),
+				invalid(
+					[
+						'const otherThing = require("other-things");',
+						'const thing = require("./things");'
+					],
+					[
+						options({namespace: {canonicalize: true}, strict: {tokens: true}}),
+						options({namespace: {canonicalize: true}, strict: {tokens: true}})
+					]
+				)
 			)
-		)
-	});
+		});
 
-	tester.run('readme namespace separators', Rule, {
-		valid: valid(
-			['const get = require("lodash.get");'],
-			[null, options({namespace: {separators: ['.']}})]
-		),
-		invalid: invalid(['const get = require("lodash.get");'], [null, options()])
-	});
+		tester.run('namespace separators', Rule, {
+			valid: valid(
+				['const get = require("lodash.get");'],
+				[null, options({namespace: {separators: ['.']}})]
+			),
+			invalid: invalid(
+				['const get = require("lodash.get");'],
+				[null, options()]
+			)
+		});
 
-	tester.run('readme order', Rule, {
-		valid: [].concat(
-			valid(
-				[
-					'const childProcess = require("child_process");',
-					'const get = require("lodash/fp/get");'
-				],
-				[null, options({order: 'left-to-right'})]
+		tester.run('order', Rule, {
+			valid: [].concat(
+				valid(
+					[
+						'const childProcess = require("child_process");',
+						'const get = require("lodash/fp/get");'
+					],
+					[null, options({order: 'left-to-right'})]
+				),
+				valid(
+					[
+						'const userControllers = require("./app/controllers/user");',
+						'const userModelsV2 = require("./app/models/user");'
+					],
+					[options({order: 'right-to-left'}), null]
+				),
+				valid(
+					[
+						'const follower = require("./app/models/follower");',
+						'const userAppModelsV3 = require("./app/models/user");'
+					],
+					[options({order: 'any'}), null]
+				)
 			),
-			valid(
-				[
-					'const userControllers = require("./app/controllers/user");',
-					'const userModelsV2 = require("./app/models/user");'
-				],
-				[options({order: 'right-to-left'}), null]
-			),
-			valid(
-				[
-					'const follower = require("./app/models/follower");',
-					'const userAppModelsV3 = require("./app/models/user");'
-				],
-				[options({order: 'any'}), null]
+			invalid: [].concat(
+				invalid(
+					['const intersectionByFP = require("lodash/fp/intersectionBy");'],
+					[null, options({order: 'left-to-right'})]
+				),
+				invalid(
+					['const viewsUser = require("./app/views/user");'],
+					[options({order: 'right-to-left'}), null]
+				),
+				invalid(
+					['const noMatch = require("./app/models");'],
+					[options({order: 'any'})]
+				)
 			)
-		),
-		invalid: [].concat(
-			invalid(
-				['const intersectionByFP = require("lodash/fp/intersectionBy");'],
-				[null, options({order: 'left-to-right'})]
-			),
-			invalid(
-				['const viewsUser = require("./app/views/user");'],
-				[options({order: 'right-to-left'}), null]
-			),
-			invalid(
-				['const noMatch = require("./app/models");'],
-				[options({order: 'any'})]
-			)
-		)
-	});
+		});
 
-	tester.run('readme strict size', Rule, {
-		valid: [].concat(
-			valid(
-				['const babelTraverse = require("@babel/traverse");'],
-				[null, options({strict: {size: true}})]
+		tester.run('strict size', Rule, {
+			valid: [].concat(
+				valid(
+					['const babelTraverse = require("@babel/traverse");'],
+					[null, options({strict: {size: true}})]
+				),
+				valid(
+					['const followerAppModels = require("./app/models/follower");'],
+					[{strict: {size: true}}, null]
+				)
 			),
-			valid(
-				['const followerAppModels = require("./app/models/follower");'],
-				[{strict: {size: true}}, null]
+			invalid: [].concat(
+				invalid(
+					['const types = require("@babel/types");'],
+					[null, options({strict: {size: true}})]
+				),
+				invalid(
+					['const user = require("./app/models/user");'],
+					[options({strict: {size: true}}), null]
+				)
 			)
-		),
-		invalid: [].concat(
-			invalid(
-				['const types = require("@babel/types");'],
-				[null, options({strict: {size: true}})]
-			),
-			invalid(
-				['const user = require("./app/models/user");'],
-				[options({strict: {size: true}}), null]
-			)
-		)
-	});
+		});
 
-	tester.run('readme strict tokens', Rule, {
-		valid: [].concat(
-			valid(
-				['const traverse = require("@babel/traverse");'],
-				[null, options({strict: {tokens: true}})]
+		tester.run('strict tokens', Rule, {
+			valid: [].concat(
+				valid(
+					['const traverse = require("@babel/traverse");'],
+					[null, options({strict: {tokens: true}})]
+				),
+				valid(
+					['const followerModels = require("./app/models/follower");'],
+					[options({strict: {tokens: true}}), null]
+				)
 			),
-			valid(
-				['const followerModels = require("./app/models/follower");'],
-				[options({strict: {tokens: true}}), null]
+			invalid: [].concat(
+				invalid(
+					['const babbleTypes = require("@babel/types");'],
+					[null, options({strict: {tokens: true}})]
+				),
+				invalid(
+					['const userModelsV2 = require("./app/models/user");'],
+					[options({strict: {tokens: true}}), null]
+				)
 			)
-		),
-		invalid: [].concat(
-			invalid(
-				['const babbleTypes = require("@babel/types");'],
-				[null, options({strict: {tokens: true}})]
-			),
-			invalid(
-				['const userModelsV2 = require("./app/models/user");'],
-				[options({strict: {tokens: true}}), null]
-			)
-		)
-	});
+		});
 
-	tester.run('readme strip', Rule, {
-		valid: [].concat(
-			valid(
-				[
-					'const decimal = require("decimal.js");',
-					'const socket = require("socket.io");'
-				],
-				[null, options({strip: ['.js', '.io']})]
+		tester.run('strip', Rule, {
+			valid: [].concat(
+				valid(
+					[
+						'const decimal = require("decimal.js");',
+						'const socket = require("socket.io");'
+					],
+					[null, options({strip: ['.js', '.io']})]
+				),
+				valid(
+					[
+						'const get = require("lodash/get.js");',
+						'const user = require("./user.js");',
+						'const decimal = require("decimal.js");'
+					],
+					[options({strip: ['.js']}), options({strip: ['.js']})]
+				),
+				valid(
+					[
+						'const get = require("lodash/get.js");',
+						'const user = require("./user.js");'
+					],
+					[options({strip: []}), options({strip: []})]
+				)
 			),
-			valid(
-				[
-					'const get = require("lodash/get.js");',
-					'const user = require("./user.js");',
-					'const decimal = require("decimal.js");'
-				],
-				[options({strip: ['.js']}), options({strip: ['.js']})]
-			),
-			valid(
-				[
-					'const get = require("lodash/get.js");',
-					'const user = require("./user.js");'
-				],
-				[options({strip: []}), options({strip: []})]
+			invalid: [].concat(
+				invalid(
+					['const normalize = require("normalize.css");'],
+					[null, options({strip: ['.js', '.io']})]
+				),
+				invalid(
+					['const decimal = require("decimal.js");'],
+					[options({strip: []}), options({strip: []})]
+				)
 			)
-		),
-		invalid: [].concat(
-			invalid(
-				['const normalize = require("normalize.css");'],
-				[null, options({strip: ['.js', '.io']})]
-			),
-			invalid(
-				['const decimal = require("decimal.js");'],
-				[options({strip: []}), options({strip: []})]
-			)
-		)
+		});
 	});
 });

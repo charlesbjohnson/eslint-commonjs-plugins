@@ -21,18 +21,18 @@ class RequireName {
 		};
 	}
 
-	check({assignment, path, node}) {
+	check({assignment, name, node}) {
 		let options;
 		let resolver;
 
 		switch (true) {
-			case Module.Local.test(path):
+			case Module.Local.test(name):
 				options = this.options.local;
-				resolver = () => Module.Local.resolve(this.context.getFilename(), path);
+				resolver = () => Module.Local.resolve(this.context.getFilename(), name);
 				break;
-			case Module.Node.test(path):
+			case Module.Node.test(name):
 				options = this.options.node;
-				resolver = () => Module.Node.resolve(path);
+				resolver = () => Module.Node.resolve(name);
 				break;
 			default:
 				this.context.report({message: Message.fail(), node});

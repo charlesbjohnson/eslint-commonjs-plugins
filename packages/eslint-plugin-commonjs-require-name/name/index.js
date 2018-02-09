@@ -4,19 +4,19 @@ const Configuration = require('./configuration');
 
 const Name = exports;
 
-function validate(assignment, path, options) {
-	if (options.disable.some(v => new RegExp(v).test(path))) {
+function validate(assignment, name, options) {
+	if (options.disable.some(v => new RegExp(v).test(name))) {
 		return {equal: true, error: null};
 	}
 
-	path = options.strip.reduce(
+	name = options.strip.reduce(
 		(s, strip) => s.replace(new RegExp(strip, 'g'), ''),
-		path
+		name
 	);
 
-	path = options.namespace.separators.reduce(
+	name = options.namespace.separators.reduce(
 		(s, separator) => s.replace(new RegExp(EscapeRegExp(separator), 'g'), '/'),
-		path
+		name
 	);
 
 	let configuration = Configuration.instance();
@@ -36,7 +36,7 @@ function validate(assignment, path, options) {
 		configuration = Configuration.canonicalize(configuration);
 	}
 
-	return Configuration.validate(configuration, assignment, path);
+	return Configuration.validate(configuration, assignment, name);
 }
 
 Name.validate = validate;

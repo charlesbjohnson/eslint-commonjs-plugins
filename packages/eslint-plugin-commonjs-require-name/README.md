@@ -174,9 +174,9 @@ Three options arguments are accepted:
 
 ```js
 "commonjs-require-name/rule": [
-  "error"                     // the eslint error level
-  {"order": "any"},           // options object for local requires
-  {"order": "left-to-right"}  // options object for node requires
+  "error"                    // the eslint error level
+  {"order": "any"},          // options object for local requires
+  {"order": "left-to-right"} // options object for node requires
 ]
 ```
 

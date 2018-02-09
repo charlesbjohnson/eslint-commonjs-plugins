@@ -15,9 +15,11 @@ describe('AssignmentExpression', () => {
 
 			const instance = AssignmentExpression.instance(fn);
 			const node = {
-				expression: {
-					left: {name: 'assignment'},
-					right: {arguments: [{value: 'path'}]}
+				left: {
+					name: 'assignment'
+				},
+				right: {
+					arguments: [{value: 'name'}]
 				}
 			};
 
@@ -25,8 +27,8 @@ describe('AssignmentExpression', () => {
 
 			expect(fn).toHaveBeenCalledWith({
 				assignment: 'assignment',
-				node,
-				path: 'path'
+				name: 'name',
+				node
 			});
 		});
 	});

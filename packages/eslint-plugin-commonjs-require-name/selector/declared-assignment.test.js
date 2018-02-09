@@ -15,16 +15,20 @@ describe('DeclaredAssignment', () => {
 
 			const instance = DeclaredAssignment.instance(fn);
 			const node = {
-				id: {name: 'assignment'},
-				init: {arguments: [{value: 'path'}]}
+				id: {
+					name: 'assignment'
+				},
+				init: {
+					arguments: [{value: 'name'}]
+				}
 			};
 
 			instance[Object.keys(instance)[0]](node);
 
 			expect(fn).toHaveBeenCalledWith({
 				assignment: 'assignment',
-				node,
-				path: 'path'
+				name: 'name',
+				node
 			});
 		});
 	});

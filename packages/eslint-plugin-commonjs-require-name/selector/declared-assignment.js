@@ -13,8 +13,8 @@ function instance(fn) {
 		[SELECTOR]: node =>
 			fn({
 				assignment: node.id.name,
-				node,
-				path: node.init.arguments[0].value
+				name: node.init.arguments[0].value,
+				node
 			})
 	};
 }
